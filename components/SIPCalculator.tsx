@@ -158,27 +158,35 @@ export default function SIPCalculator() {
                         color: "hsl(var(--chart-3))",
                       },
                     }}
-                    className="h-[400px]"
+                    className="h-[400px] w-full overflow-x-auto"
                   >
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart
+                        <LineChart
                         data={result.yearlyData}
                         margin={{
                           top: 5,
-                          right: 30,
-                          left: 20,
+                          right: 5,
+                          left: 0,
                           bottom: 5,
                         }}
-                      >
+                        >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="year" />
-                        <YAxis />
+                        <XAxis 
+                          dataKey="year" 
+                          tick={{ fontSize: 12 }}
+                          tickMargin={5}
+                        />
+                        <YAxis 
+                          tick={{ fontSize: 12 }}
+                          tickFormatter={(value) => `${(value / 10000000).toFixed(1)}Cr`}
+                          width={60}
+                        />
                         <ChartTooltip content={<ChartTooltipContent />} />
-                        <Legend />
+                        <Legend wrapperStyle={{ fontSize: '12px' }} />
                         <Line type="monotone" dataKey="totalInvestment" stroke="var(--color-totalInvestment)" name="Total Investment" />
                         <Line type="monotone" dataKey="totalCorpus" stroke="var(--color-totalCorpus)" name="Total Corpus" />
                         <Line type="monotone" dataKey="realValueCorpus" stroke="var(--color-realValueCorpus)" name="Real Value of Corpus" />
-                      </LineChart>
+                        </LineChart>
                     </ResponsiveContainer>
                   </ChartContainer>
                 </CardContent>

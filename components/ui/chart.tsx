@@ -4,6 +4,7 @@ import * as React from "react"
 import * as RechartsPrimitive from "recharts"
 
 import { cn } from "@/lib/utils"
+import { formatIndianCurrency } from "@/utils/sipCalculator"
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const
@@ -198,9 +199,11 @@ const ChartTooltipContent = React.forwardRef<
                   indicator === "dot" && "items-center"
                 )}
               >
-                {formatter && item?.value !== undefined && item.name ? (
+                {
+                formatter && item?.value !== undefined && item.name ? (
                   formatter(item.value, item.name, item, index, item.payload)
-                ) : (
+                ) : 
+                (
                   <>
                     {itemConfig?.icon ? (
                       <itemConfig.icon />
@@ -240,12 +243,13 @@ const ChartTooltipContent = React.forwardRef<
                       </div>
                       {item.value && (
                         <span className="font-mono font-medium tabular-nums text-foreground">
-                          {item.value.toLocaleString()}
+                          ₹{formatIndianCurrency(Number(item.value))}
                         </span>
                       )}
                     </div>
                   </>
-                )}
+                )
+                }
               </div>
             )
           })}
