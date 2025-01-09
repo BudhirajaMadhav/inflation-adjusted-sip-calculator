@@ -117,21 +117,28 @@ export default function SIPCalculator() {
                   <CardTitle className="text-2xl font-bold">Results</CardTitle>
                 </CardHeader>
                 <CardContent className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="col-span-2 bg-blue-50 rounded-lg p-4 shadow border-2 border-blue-500">
+                  <div className="flex flex-col gap-6">
+                    {/* Blue box - always full width */}
+                    <div className="w-full bg-blue-50 rounded-lg p-4 shadow border-2 border-blue-500">
                       <p className="font-semibold text-gray-700">Real Value of Corpus (post-inflation):</p>
                       <p className="text-3xl font-bold text-blue-600">₹ {formatIndianCurrency(result.real_value_corpus)}</p>
                       <p className="text-sm text-gray-600 mt-2">This is what your investment will be worth in today's money.</p>
                     </div>
-                    <div className="bg-gray-50 rounded-lg p-4 shadow">
-                      <p className="font-semibold text-gray-700">Total Investment:</p>
-                      <p className="text-2xl font-bold text-gray-800">₹ {formatIndianCurrency(result.total_investment)}</p>
+
+                    {/* Gray boxes container - side by side on larger screens */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="bg-gray-50 rounded-lg p-4 shadow">
+                        <p className="font-semibold text-gray-700">Total Investment:</p>
+                        <p className="text-2xl font-bold text-gray-800">₹ {formatIndianCurrency(result.total_investment)}</p>
+                      </div>
+                      <div className="bg-gray-50 rounded-lg p-4 shadow">
+                        <p className="font-semibold text-gray-700">Total Corpus:</p>
+                        <p className="text-2xl font-bold text-gray-800">₹ {formatIndianCurrency(result.total_corpus)}</p>
+                      </div>
                     </div>
-                    <div className="bg-gray-50 rounded-lg p-4 shadow">
-                      <p className="font-semibold text-gray-700">Total Corpus:</p>
-                      <p className="text-2xl font-bold text-gray-800">₹ {formatIndianCurrency(result.total_corpus)}</p>
-                    </div>
-                    <div className="col-span-2 bg-green-50 rounded-lg p-4 shadow border-2 border-green-500">
+
+                    {/* Green box - always full width */}
+                    <div className="w-full bg-green-50 rounded-lg p-4 shadow border-2 border-green-500">
                       <p className="font-semibold text-gray-700">Real Value of Total Investment (today's value):</p>
                       <p className="text-3xl font-bold text-green-600">₹ {formatIndianCurrency(result.real_value_investment)}</p>
                       <p className="text-sm text-gray-600 mt-2">This is what you're actually investing in today's money.</p>
