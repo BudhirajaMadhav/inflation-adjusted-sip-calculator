@@ -11,6 +11,11 @@ import { Label } from '@/components/ui/label'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer } from 'recharts'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
+const handleInputChange = (setter: (value: number) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const value = e.target.value;
+  setter(value === '' ? 0 : Number(value));
+};
+
 export default function SIPCalculator() {
   const [sipAmount, setSipAmount] = useState(10000)
   const [annualStepup, setAnnualStepup] = useState(10)
@@ -47,8 +52,8 @@ export default function SIPCalculator() {
                   <Input
                     id="sipAmount"
                     type="number"
-                    value={sipAmount}
-                    onChange={(e) => setSipAmount(Number(e.target.value))}
+                    value={sipAmount === 0 ? '' : sipAmount}
+                    onChange={handleInputChange(setSipAmount)}
                     className="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                   />
                 </div>
@@ -59,8 +64,8 @@ export default function SIPCalculator() {
                   <Input
                     id="annualStepup"
                     type="number"
-                    value={annualStepup}
-                    onChange={(e) => setAnnualStepup(Number(e.target.value))}
+                    value={annualStepup === 0 ? '' : annualStepup}
+                    onChange={handleInputChange(setAnnualStepup)}
                     className="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                   />
                 </div>
@@ -71,8 +76,8 @@ export default function SIPCalculator() {
                   <Input
                     id="annualReturn"
                     type="number"
-                    value={annualReturn}
-                    onChange={(e) => setAnnualReturn(Number(e.target.value))}
+                    value={annualReturn === 0 ? '' : annualReturn}
+                    onChange={handleInputChange(setAnnualReturn)}
                     className="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                   />
                 </div>
@@ -83,8 +88,8 @@ export default function SIPCalculator() {
                   <Input
                     id="years"
                     type="number"
-                    value={years}
-                    onChange={(e) => setYears(Number(e.target.value))}
+                    value={years === 0 ? '' : years}
+                    onChange={handleInputChange(setYears)}
                     className="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                   />
                 </div>
@@ -95,8 +100,8 @@ export default function SIPCalculator() {
                   <Input
                     id="inflationRate"
                     type="number"
-                    value={inflationRate}
-                    onChange={(e) => setInflationRate(Number(e.target.value))}
+                    value={inflationRate === 0 ? '' : inflationRate}
+                    onChange={handleInputChange(setInflationRate)}
                     className="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                   />
                 </div>
@@ -119,11 +124,19 @@ export default function SIPCalculator() {
                 <CardContent className="p-6">
                   <div className="flex flex-col gap-6">
                     {/* Blue box - always full width */}
-                    <div className="w-full bg-blue-50 rounded-lg p-4 shadow border-2 border-blue-500">
-                      <p className="font-semibold text-gray-700">Real Value of Corpus (post-inflation):</p>
-                      <p className="text-3xl font-bold text-blue-600">₹ {formatIndianCurrency(result.real_value_corpus)}</p>
+                    <div className="w-full bg-green-50 rounded-lg p-4 shadow border-2 border-green-500">
+                      <p className="font-semibold text-gray-700">Inflation adjusted value of Corpus:</p>
+                      <p className="text-3xl font-bold text-green-600">₹ {formatIndianCurrency(result.real_value_corpus)}</p>
                       <p className="text-sm text-gray-600 mt-2">This is what your investment will be worth in today's money.</p>
                     </div>
+
+                    {/* Green box - always full width */}
+                    <div className="w-full bg-blue-50 rounded-lg p-4 shadow border-2 border-blue-500">
+                      <p className="font-semibold text-gray-700">Inflation adjusted value of Total Investment:</p>
+                      <p className="text-3xl font-bold text-blue-600">₹ {formatIndianCurrency(result.real_value_investment)}</p>
+                      <p className="text-sm text-gray-600 mt-2">This is what you're actually investing in today's money.</p>
+                    </div>
+
 
                     {/* Gray boxes container - side by side on larger screens */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -137,12 +150,6 @@ export default function SIPCalculator() {
                       </div>
                     </div>
 
-                    {/* Green box - always full width */}
-                    <div className="w-full bg-green-50 rounded-lg p-4 shadow border-2 border-green-500">
-                      <p className="font-semibold text-gray-700">Real Value of Total Investment (today's value):</p>
-                      <p className="text-3xl font-bold text-green-600">₹ {formatIndianCurrency(result.real_value_investment)}</p>
-                      <p className="text-sm text-gray-600 mt-2">This is what you're actually investing in today's money.</p>
-                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -160,11 +167,11 @@ export default function SIPCalculator() {
                       },
                       totalCorpus: {
                         label: "Total Corpus",
-                        color: "hsl(var(--chart-2))",
+                        color: "hsl(var(--chart-3))",
                       },
                       realValueCorpus: {
-                        label: "Real Value of Corpus",
-                        color: "hsl(var(--chart-3))",
+                        label: "Inflation adjusted value of Corpus",
+                        color: "hsl(var(--chart-2))",
                       },
                     }}
                     className="h-[400px] w-full overflow-x-auto"
@@ -194,7 +201,7 @@ export default function SIPCalculator() {
                         <Legend wrapperStyle={{ fontSize: '12px' }} />
                         <Line type="monotone" dataKey="totalInvestment" stroke="var(--color-totalInvestment)" name="Total Investment" />
                         <Line type="monotone" dataKey="totalCorpus" stroke="var(--color-totalCorpus)" name="Total Corpus" />
-                        <Line type="monotone" dataKey="realValueCorpus" stroke="var(--color-realValueCorpus)" name="Real Value of Corpus" />
+                        <Line type="monotone" dataKey="realValueCorpus" stroke="var(--color-realValueCorpus)" name="Inflation adjusted value of Corpus" />
                         </LineChart>
                     </ResponsiveContainer>
                   </ChartContainer>
