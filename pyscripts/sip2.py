@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 def format_indian_currency(number):
     # Convert the number to string and split into integer and decimal parts
     str_number = str(number)
@@ -73,6 +75,54 @@ def sip_calculator(sip_amount, annual_stepup, annual_return, years, inflation_ra
         "real_value_corpus": real_value_corpus,
     }
 
+def plot_sip_growth(sip_amount, annual_stepup, annual_return, years, inflation_rate):
+    """
+    Plots the growth of SIP investment over time.
+
+    Parameters:
+        sip_amount (float): Initial monthly SIP amount.
+        annual_stepup (float): Annual step-up percentage.
+        annual_return (float): Expected annual return in percentage.
+        years (int): Investment duration in years.
+        inflation_rate (float): Annual inflation rate in percentage.
+    """
+    monthly_return = annual_return / 12 / 100
+    total_months = years * 12
+    inflation_rate_decimal = inflation_rate / 100
+    current_sip = sip_amount
+
+    months = []
+    corpus_values = []
+    total_investment_values = []
+    real_value_investment_values = []
+    total_corpus = 0
+    total_investment = 0
+    real_value_investment = 0
+
+    for year in range(1, years + 1):
+        yearly_contribution = current_sip * 12
+        total_investment += yearly_contribution
+        real_value_investment += yearly_contribution / ((1 + inflation_rate_decimal) ** (years - year))
+
+        for month in range(12):
+            total_corpus += current_sip * ((1 + monthly_return) ** (total_months - (12 * (year - 1) + month + 1)))
+            months.append((year - 1) * 12 + month + 1)
+            corpus_values.append(total_corpus)
+            total_investment_values.append(total_investment)
+            real_value_investment_values.append(real_value_investment)
+        current_sip *= (1 + annual_stepup / 100)
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(months, corpus_values, label='Total Corpus')
+    plt.plot(months, total_investment_values, label='Total Investment')
+    plt.plot(months, real_value_investment_values, label='Real Value of Investment')
+    plt.xlabel('Months')
+    plt.ylabel('Value (₹)')
+    plt.title('SIP Investment Growth Over Time')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
 # Example Usage
 sip_amount = 10000  # Initial SIP amount (₹)
 annual_stepup = 10  # Annual step-up (%)
@@ -86,3 +136,6 @@ print("Total Investment: ₹", format_indian_currency(round(result["total_invest
 print("Real Value of Total Investment (today's value): ₹", format_indian_currency(round(result["real_value_investment"], 2)))
 print("Total Corpus: ₹", format_indian_currency(round(result["total_corpus"], 2)))
 print("Real Value of Corpus (post-inflation): ₹", format_indian_currency(round(result["real_value_corpus"], 2)))
+
+# Plot the SIP growth
+plot_sip_growth(sip_amount, annual_stepup, annual_return, years, inflation_rate)
