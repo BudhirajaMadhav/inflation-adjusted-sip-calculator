@@ -219,6 +219,9 @@ export default function SIPCalculator() {
           >
             Made with ❤️ by Madhav Budhiraja
           </a>
+            <p className="mt-2 text-sm text-gray-600">
+            powered by <a href="https://v0.dev" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">v0.dev</a>
+            </p>
         </footer>
       </div>
     </div>
