@@ -11,26 +11,31 @@ import { Label } from '@/components/ui/label'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer } from 'recharts'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
-const handleInputChange = (setter: (value: number) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
-  const value = e.target.value;
-  setter(value === '' ? 0 : Number(value));
+const handleInputChange = (setter: (value: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  let value = e.target.value;
+  console.log(value)
+  value = value.replace(/^0+(?=\d)/, '');
+  if (!isNaN(Number(value))) {
+    console.log("hey", value)
+    setter(value === '' ? '0' : value);
+  }
 };
 
 export default function SIPCalculator() {
-  const [sipAmount, setSipAmount] = useState(10000)
-  const [annualStepup, setAnnualStepup] = useState(10)
-  const [annualReturn, setAnnualReturn] = useState(12)
-  const [years, setYears] = useState(30)
-  const [inflationRate, setInflationRate] = useState(6)
+  const [sipAmount, setSipAmount] = useState<string>('10000')
+  const [annualStepup, setAnnualStepup] = useState<string>('10')
+  const [annualReturn, setAnnualReturn] = useState<string>('12')
+  const [years, setYears] = useState<string>('30')
+  const [inflationRate, setInflationRate] = useState<string>('6')
   const [result, setResult] = useState<any>(null)
 
   const handleCalculate = () => {
     const calculatedResult = sipCalculator(
-      sipAmount,
-      annualStepup,
-      annualReturn,
-      years,
-      inflationRate
+      Number(sipAmount),
+      Number(annualStepup),
+      Number(annualReturn),
+      Number(years),
+      Number(inflationRate)
     )
     setResult(calculatedResult)
   }
@@ -51,8 +56,8 @@ export default function SIPCalculator() {
                   </Label>
                   <Input
                     id="sipAmount"
-                    type="number"
-                    value={sipAmount === 0 ? '' : sipAmount}
+                    type="string"
+                    value={sipAmount}
                     onChange={handleInputChange(setSipAmount)}
                     className="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                   />
@@ -63,8 +68,8 @@ export default function SIPCalculator() {
                   </Label>
                   <Input
                     id="annualStepup"
-                    type="number"
-                    value={annualStepup === 0 ? '' : annualStepup}
+                    type="string"
+                    value={annualStepup}
                     onChange={handleInputChange(setAnnualStepup)}
                     className="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                   />
@@ -75,8 +80,8 @@ export default function SIPCalculator() {
                   </Label>
                   <Input
                     id="annualReturn"
-                    type="number"
-                    value={annualReturn === 0 ? '' : annualReturn}
+                    type="string"
+                    value={annualReturn}
                     onChange={handleInputChange(setAnnualReturn)}
                     className="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                   />
@@ -87,8 +92,8 @@ export default function SIPCalculator() {
                   </Label>
                   <Input
                     id="years"
-                    type="number"
-                    value={years === 0 ? '' : years}
+                    type="string"
+                    value={years}
                     onChange={handleInputChange(setYears)}
                     className="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                   />
@@ -99,8 +104,8 @@ export default function SIPCalculator() {
                   </Label>
                   <Input
                     id="inflationRate"
-                    type="number"
-                    value={inflationRate === 0 ? '' : inflationRate}
+                    type="string"
+                    value={inflationRate}
                     onChange={handleInputChange(setInflationRate)}
                     className="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                   />
